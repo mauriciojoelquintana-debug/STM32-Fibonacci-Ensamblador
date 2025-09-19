@@ -127,16 +127,13 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 
                 AREA    |.text|, CODE, READONLY
 
-; Reset handler
-Reset_Handler    PROC
-                 EXPORT  Reset_Handler             [WEAK]
-     IMPORT  __main
-     IMPORT  SystemInit
-                 LDR     R0, =SystemInit
-                 BLX     R0
-                 LDR     R0, =__main
-                 BX      R0
-                 ENDP
+; Reset handler en startup_stm32f10x_md.s
+Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]
+                IMPORT  main_asm      ; Importa nuestra etiqueta
+
+                B       main_asm      ; Salta directamente a nuestro código
+                ENDP
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 
@@ -306,11 +303,3 @@ __user_initial_stackheap
 
                  END
 
-            AREA    |.text|, CODE, READONLY, ALIGN=2
-            THUMB
-            EXPORT  main
-
-main
-            BX      LR
-
-            END
